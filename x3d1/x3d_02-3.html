@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <title>營造法式 大木作制度</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+  <link rel="stylesheet" href="https://www.x3dom.org/download/dev/x3dom.css" />
+  <script src="https://www.x3dom.org/download/dev/x3dom.js"></script>
+
+  <style>
+    body {
+      font-family: Monospace;
+      background-color: #72645b;
+      margin: 0px;
+      overflow: hidden;
+    }
+
+    #info {
+      color: #fff;
+      position: absolute;
+      top: 10px;
+      width: 100%;
+      text-align: center;
+      z-index: 100;
+      display: block;
+    }
+
+    a { color: skyblue; }
+
+    x3d {
+      width: 100vw;
+      height: 100vh;
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="info">
+    營造法式 大木作制度
+    <a xmlns:cc="http://creativecommons.org/ns#"
+       href="https://myweb.ntut.edu.tw/~tjhsieh/"
+       property="cc:attributionName"
+       rel="cc:attributionURL">
+      <img alt="創用 CC 授權條款" style="border-width:0" src="../CC-BY-NC-SA.svg" width="128"/>
+    </a>
+  </div>
+
+  <x3d showStat="false" showLog="false">
+    <scene>
+      <background skyColor="0.447 0.392 0.357"></background>
+
+      <fog color="0.447 0.392 0.357" visibilityRange="13"></fog>
+
+      <navigationInfo type='"EXAMINE" "ANY"'
+                      headlight="false"
+                      reverseScroll="true">
+      </navigationInfo>
+
+      <viewpoint id="vp"
+                 position="0 0 4"
+                 centerOfRotation="0 0 0"
+                 fieldOfView="0.6108"
+                 description="主視角">
+      </viewpoint>
+
+      <ambientLight color="0.467 0.467 0.467" intensity="1"></ambientLight>
+      <directionalLight direction="-1 -1 -1" color="1 1 1" intensity="1.35"></directionalLight>
+      <directionalLight direction="-0.5 -1 1" color="1 0.667 0" intensity="1"></directionalLight>
+
+      <transform translation="0 -1 0">
+        <shape>
+          <appearance>
+            <material diffuseColor="0.6 0.6 0.6"
+                      specularColor="0.063 0.063 0.063"
+                      ambientIntensity="0.6"
+                      shininess="0.1">
+            </material>
+          </appearance>
+          <box size="40 0.01 40"></box>
+        </shape>
+      </transform>
+
+      <transform DEF="modelRotation">
+        <transform translation="0 0 0"
+                   rotation="1 0 0 -1.5708"
+                   scale="1 1 1">
+            <inline url="model/02-3.x3d"
+                    nameSpaceName="model"
+                    mapDEFToID="true">
+            </inline>
+
+        </transform>
+      </transform>
+
+      <timeSensor DEF="time"
+                  cycleInterval="5"
+                  loop="true"
+                  enabled="true">
+      </timeSensor>
+
+      <orientationInterpolator DEF="rotator"
+                               key="0 0.25 0.5 0.75 1"
+                               keyValue="0 1 0 0,
+                                         0 1 0 1.5708,
+                                         0 1 0 3.1416,
+                                         0 1 0 4.7124,
+                                         0 1 0 6.2832">
+      </orientationInterpolator>
+
+      <ROUTE fromNode="time" fromField="fraction_changed"
+             toNode="rotator" toField="set_fraction"></ROUTE>
+      <ROUTE fromNode="rotator" fromField="value_changed"
+             toNode="modelRotation" toField="rotation"></ROUTE>
+    </scene>
+  </x3d>
+</body>
+</html>
