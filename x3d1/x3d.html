@@ -86,7 +86,8 @@
         <transform translation="0 0 0"
                    rotation="1 0 0 -1.5708"
                    scale="1 1 1">
-            <inline url="model/02-3.x3d"
+            <inline id="modelInline"
+                    url=""
                     nameSpaceName="model"
                     mapDEFToID="true">
             </inline>
@@ -95,7 +96,7 @@
       </transform>
 
       <timeSensor DEF="time"
-                  cycleInterval="5"
+                  cycleInterval="10"
                   loop="true"
                   enabled="true">
       </timeSensor>
@@ -115,5 +116,55 @@
              toNode="modelRotation" toField="rotation"></ROUTE>
     </scene>
   </x3d>
+
+  <script>
+    const MODEL_WHITELIST = [
+      '02-3', '02-4', '02-5', '02-6',
+      '05-1', '05-2', '05-5', '05-6',
+      '06-1', '06-2',
+      '07-1', '07-2',
+      '08-1', '08-2',
+      '09-1', '09-2',
+      '10-1', '10-2', '10-3', '10-4', '10-5'
+    ];
+
+    const MODEL_BASE_PATH = './model/';
+    const MODEL_EXTENSION = '.x3d';
+
+    function getModelFromURL() {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get('model');
+    }
+
+    function isModelAllowed(modelName) {
+      return MODEL_WHITELIST.includes(modelName);
+    }
+
+    function loadModel() {
+      const modelName = getModelFromURL();
+
+      if (!modelName) {
+        console.warn('未指定模型參數。使用方式: ?model=模型名稱');
+        document.getElementById('info').innerHTML += '<br><span style="color: #ffaa00;">提示：請使用 ?model=模型名稱 來指定要載入的模型</span>';
+        return;
+      }
+
+      if (!isModelAllowed(modelName)) {
+        console.error('拒絕載入：模型 "' + modelName + '" 不在白名單中');
+        document.getElementById('info').innerHTML += '<br><span style="color: #ff6b6b;">錯誤：模型 "' + modelName + '" 不在允許的列表中</span>';
+        return;
+      }
+
+      const modelPath = MODEL_BASE_PATH + modelName + MODEL_EXTENSION;
+      const inlineElement = document.getElementById('modelInline');
+
+      if (inlineElement) {
+        inlineElement.setAttribute('url', modelPath);
+        console.log('成功載入模型：' + modelPath);
+      }
+    }
+
+    window.addEventListener('load', loadModel);
+  </script>
 </body>
 </html>
